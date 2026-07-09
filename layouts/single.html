@@ -1,0 +1,60 @@
+{{ define "main" }}
+    <div class="content">
+        <main class="post">
+
+            <div class="post-info">
+                {{ if .IsTranslated }}
+                    {{ i18n "postAvailable" }}
+                    {{ range .Translations }}
+                        <a href="{{ .Permalink }}"><span class="flag fi fi-{{ index $.Site.Data.langFlags (.Lang) }}"></span></a>
+                    {{ end}}
+                {{ end }}
+                </p>
+            </div>
+
+            <article>
+                <h2 class="post-title"><a href="{{ .Permalink }}">{{ .Title | markdownify }}</a></h2>
+
+                <div class="post-info">
+                    {{ partial "tags.html" .Params.tags }}
+                    {{ partial "categories.html" . }}
+
+                    {{- if .Params.repo }}
+                        <p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-github"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg><a href="{{ .Params.repo }}" target="_blank" rel="noopener">View on GitHub</a></p>
+                    {{- end }}
+                </div>
+
+                {{ if .Params.Cover }}
+                    <figure class="post-cover">
+                        <img src="{{ .Params.Cover | absURL }}" alt="{{ .Title }}" />
+                    
+                        {{ if .Params.CoverCaption }}
+                            <figcaption class="center">{{ .Params.CoverCaption | markdownify }}</figcaption>
+                        {{ end }}
+                    </figure>
+                {{ end }}
+                
+                {{ if .Params.toc }}
+                    <hr />
+                    <aside id="toc">
+                    <div class="toc-title">{{ i18n "tableOfContents" }}</div>
+                        {{ .TableOfContents }}
+                    </aside>
+                    <hr />
+                {{ end }}
+
+                <div class="post-content">
+                    {{ .Content }}
+                </div>
+            </article>
+
+            <hr />
+
+            <div class="post-info">
+                {{- if .GitInfo }}
+                    <p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-git-commit"><circle cx="12" cy="12" r="4"></circle><line x1="1.05" y1="12" x2="7" y2="12"></line><line x1="17.01" y1="12" x2="22.96" y2="12"></line></svg><a href="{{ .Site.Params.gitUrl -}}{{ .GitInfo.Hash }}" target="_blank" rel="noopener">{{ .GitInfo.AbbreviatedHash }}</a> @ {{ if .Site.Params.dateformNum }}{{ dateFormat .Site.Params.dateformNum .GitInfo.AuthorDate.Local }}{{ else }}{{ dateFormat "2006-01-02" .GitInfo.AuthorDate.Local }}{{ end }}</p>
+                {{- end }}
+            </div>
+        </main>
+    </div>
+{{ end }}
