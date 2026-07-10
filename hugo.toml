@@ -1,5 +1,5 @@
 baseURL = "https://0burock0.github.io"
-title   = "Hello"
+title   = "Burak Baştürk"
 locale = "en-us"
 theme = "hello-friend-ng"
 
@@ -67,7 +67,7 @@ disableHugoGeneratorInject = false
 
   # Metadata mostly used in document's head
   # 
-  description = "Nice theme for homepages and blogs"
+  description = ""
   keywords = ""
   images = [""]
 
