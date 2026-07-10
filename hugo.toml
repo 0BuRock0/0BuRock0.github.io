@@ -112,7 +112,7 @@ disableHugoGeneratorInject = false
   #
   # Enables the global language menu.
   #
-  enableGlobalLanguageMenu = false
+  enableGlobalLanguageMenu = true
 
   # Integrate Javascript files or stylesheets by adding the url to the external assets or by
   # linking local files with their path relative to the static folder, e.g. "css/styles.css"
@@ -250,3 +250,17 @@ disableHugoGeneratorInject = false
     name = "writeups"
     url = "/writeups/"
     weight = 3
+
+defaultContentLanguage = "en"
+defaultContentLanguageInSubdir = false
+
+[languages]
+  [languages.en]
+    languageName = "English"
+    weight = 1
+    title = "Hello"
+
+  [languages.tr]
+    languageName = "Türkçe"
+    weight = 2
+    title = "Merhaba"

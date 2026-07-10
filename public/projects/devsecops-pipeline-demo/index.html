@@ -134,6 +134,14 @@ Tool Category GitLeaks Secret scanning Bandit SAST (Static Application Security 
             
                 <li><a href="http://localhost:1313/writeups/">writeups</a></li>
             
+        <ul class="submenu">
+            <li class="dropdown">
+                <a href="javascript:void(0)" class="dropbtn">en</a>
+                <div class="dropdown-content">
+                        
+                </div>
+            </li>
+        </ul>
     </ul>
 </nav>
 
@@ -268,22 +276,22 @@ Tool Category GitLeaks Secret scanning Bandit SAST (Static Application Security 
 <li>
 <p><input checked="" disabled="" type="checkbox"> <strong>GitLeaks (push-scoped)</strong></p>
 <p>In the first run, the GitLeaks job caught the hardcoded API key and flagged it. Later, after adding the Bandit job, GitLeaks stopped flagging anything — even though the key was still sitting in the git history. Digging into this, I found that GitLeaks&rsquo; default scan is scoped to the current push, not the full repository history — since I&rsquo;d only modified and committed the workflow file at that point, the push didn&rsquo;t include the commit with the key, so there was nothing in that specific push for GitLeaks to catch. This led me to add a second job that runs GitLeaks against the entire git history instead.</p>
-<p><img src="screenshots/gitleaks-standard-vs-fullhistory.png" alt="Screenshot: standard scan passes, full-history scan fails">
+<p><img src="http://localhost:1313/projects/devsecops-pipeline-demo/screenshots/gitleaks-standard-vs-fullhistory.png" alt="Screenshot: standard scan passes, full-history scan fails">
 <em>On a later push, the standard scan passes (no secret in the latest commit), but the full-history scan still fails.</em></p>
-<p><img src="screenshots/gitleaks-fullhistory-detail.png" alt="Screenshot: full-history scan detail">
+<p><img src="http://localhost:1313/projects/devsecops-pipeline-demo/screenshots/gitleaks-fullhistory-detail.png" alt="Screenshot: full-history scan detail">
 <em>Inside the full-history job, GitLeaks shows exactly which commit introduced the secret and what the leaked value was.</em></p>
 </li>
 <li>
 <p><input checked="" disabled="" type="checkbox"> <strong>Bandit</strong></p>
-<p><img src="screenshots/app-intended-use.png" alt="Screenshot: intended use of the app"></p>
-<p><img src="screenshots/sql-injection-demo.png" alt="Screenshot: SQL injection against the app">
+<p><img src="http://localhost:1313/projects/devsecops-pipeline-demo/screenshots/app-intended-use.png" alt="Screenshot: intended use of the app"></p>
+<p><img src="http://localhost:1313/projects/devsecops-pipeline-demo/screenshots/sql-injection-demo.png" alt="Screenshot: SQL injection against the app">
 <em>The app is vulnerable to SQL injection, demonstrated here.</em></p>
-<p><img src="screenshots/bandit-scan-result.png" alt="Screenshot: Bandit scan result">
+<p><img src="http://localhost:1313/projects/devsecops-pipeline-demo/screenshots/bandit-scan-result.png" alt="Screenshot: Bandit scan result">
 <em>Bandit reports the exact location of the issue, its severity and confidence level, and the corresponding CWE code.</em></p>
 </li>
 <li>
 <p><input checked="" disabled="" type="checkbox"> <strong>Snyk</strong></p>
-<p><img src="screenshots/snyk-scan-result.png" alt="Screenshot: Snyk scan result">
+<p><img src="http://localhost:1313/projects/devsecops-pipeline-demo/screenshots/snyk-scan-result.png" alt="Screenshot: Snyk scan result">
 <em>Snyk flags the pinned vulnerable dependency (<code>PyYAML==5.3.1</code>) with an upgrade suggestion. It also unexpectedly caught a vulnerability in the Flask version used to build the app — a good reminder that these issues can surface anywhere, at any time, which is exactly why dependency scanning needs to run on every change, not just once. A CI job makes that easy to enforce automatically.</em></p>
 </li>
 </ul>
