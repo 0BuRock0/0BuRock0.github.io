@@ -223,14 +223,17 @@ disableHugoGeneratorInject = false
   [[params.social]]
     name = "email"
     url  = "mailto:burakbasturk00@outlook.com"
+    nonewpage = 0
 
   [[params.social]]
     name = "github"
     url  = "https://github.com/0BuRock0"
+    nonewpage = 0
 
   [[params.social]]
     name = "linkedin"
     url  = "https://www.linkedin.com/in/burak-baştürk/"
+    nonewpage = 0
 
 [menu]
   [[menu.main]]
