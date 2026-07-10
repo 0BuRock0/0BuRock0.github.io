@@ -1,7 +1,7 @@
 ---
 title: "DevSecOps Pipeline Demo"
 date: 2026-07-09
-draft: true
+draft: false
 repo: "https://github.com/0burock0/devsecops-pipeline-demo"
 categories: ["web-dev","cybersecurity",]
 tags: []
