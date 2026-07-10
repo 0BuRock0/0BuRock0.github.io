@@ -261,9 +261,9 @@ defaultContentLanguageInSubdir = false
   [languages.en]
     languageName = "English"
     weight = 1
-    title = "Hello"
+    title = "Burak Baştürk"
 
   [languages.tr]
     languageName = "Türkçe"
     weight = 2
-    title = "Merhaba"
+    title = "Burak Baştürk"
