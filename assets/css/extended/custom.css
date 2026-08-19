@@ -1,0 +1,27 @@
+/* Dark mode renk paletini terminal yeşiline çek
+   Not: PaperMod dark mode'u ".dark" class'ıyla değil,
+   [data-theme="dark"] attribute'uyla yönetiyor - selector'ü buna göre yazdık */
+:root[data-theme="dark"] {
+  --primary: rgb(57, 255, 136);     /* linkler, vurgu rengi - terminal yeşili */
+  --secondary: rgb(126, 232, 164);  /* ikincil metinler */
+  --theme: rgb(8, 10, 8);           /* arka plan, koyu yeşilimsi siyah */
+  --entry: rgb(16, 20, 17);         /* kart/yazı arka planı */
+  --border: rgb(30, 60, 40);        /* çerçeveler */
+  --code-block-bg: rgb(14, 18, 15); /* kod bloğu arka planı */
+}
+
+/* Başlıkları monospace yap, terminal hissi versin */
+.post-title, .entry-header h2, h1, h2, h3 {
+  font-family: "JetBrains Mono", "Fira Code", Consolas, monospace;
+}
+
+/* Kod bloklarına ince yeşil bir çerçeve */
+.highlight, pre {
+  border-left: 3px solid rgb(57, 255, 136);
+}
+
+/* Link hover'da yumuşak yeşil parlama */
+a:hover {
+  color: rgb(57, 255, 136);
+  text-shadow: 0 0 6px rgba(57, 255, 136, 0.4);
+}
