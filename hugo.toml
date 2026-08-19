@@ -1,0 +1,27 @@
+baseURL = "https://0burock0.github.io/"
+languageCode = "en-us"
+title = "0BuRock0"
+theme = "PaperMod"
+
+[params]
+  defaultTheme = "dark"
+  ShowReadingTime = true
+  ShowShareButtons = false
+  ShowPostNavLinks = true
+  ShowBreadCrumbs = true
+  ShowCodeCopyButtons = true
+
+[[menu.main]]
+  name = "Projects"
+  url = "/projects/"
+  weight = 10
+
+[[menu.main]]
+  name = "Writeups"
+  url = "/writeups/"
+  weight = 20
+
+[[menu.main]]
+  name = "whoami"
+  url = "/whoami/"
+  weight = 5
