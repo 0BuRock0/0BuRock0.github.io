@@ -1,0 +1,22 @@
+/* --- DARK THEME (Varsayılan) --- */
+/* İç linkler (Relative linkler, örn: /hakkimda) */
+a {
+  color: #34d399 !important; /* emerald */
+}
+
+/* Dış linkler (http veya https ile başlayanlar) */
+a[href^="http"] {
+  color: #f472b6 !important; /* pink */
+}
+
+
+/* --- LIGHT THEME --- */
+/* İç linkler */
+.light-theme a {
+  color: #be185d !important; /* rose */
+}
+
+/* Dış linkler */
+.light-theme a[href^="http"] {
+  color: #15803d !important; /* green */
+}
