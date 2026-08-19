@@ -1,163 +1,265 @@
 <!DOCTYPE html>
-<html lang="en">
-    <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
-        <meta charset="UTF-8">
-<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<html lang="en" dir="auto" data-theme="dark">
 
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta name="author" content="Burak ">
+<meta name="robots" content="index, follow">
+<title>DevSecOps-Pipeline | 0BuRock0&#39;s Portfolio</title>
+<meta name="keywords" content="web-dev, cybersecurity">
 <meta name="description" content="A DevSecOps pipeline demo: a deliberately vulnerable app scanned by GitLeaks, Bandit, and Snyk to demonstrate how automated security scanning fits into a real CI/CD workflow.
-Overview / Purpose This project demonstrates a basic DevSecOps pipeline to understand how vulnerability scanning works in an actual project, not just in theory.
+Overview / Purpose
+This project demonstrates a basic DevSecOps pipeline to understand how vulnerability scanning works in an actual project, not just in theory.
 Tools used and their category:
-Tool Category GitLeaks Secret scanning Bandit SAST (Static Application Security Testing) Snyk SCA (Software Composition Analysis) Architecture / Pipeline Trigger: the pipeline runs on every push. Jobs: secret-scan, secret-scan-full-history, bandit-scan, snyk-scan. All four are separate jobs in the same workflow file with no needs: dependency between them, so GitHub Actions runs them in parallel by default. Job What it does secret-scan Uses GitLeaks to scan the commits included in the current push, checking for secrets (API keys, credentials, etc.) being committed to git. secret-scan-full-history Same tool as secret-scan, but scans the entire git history instead of just the current push, to catch anything left behind or forgotten. bandit-scan Uses Bandit to scan the app&rsquo;s source code for known code-level vulnerabilities. snyk-scan Uses Snyk to scan the app&rsquo;s dependencies for known vulnerabilities. The Vulnerable App Flaw Why it&rsquo;s dangerous How it&rsquo;s fixed SQL injection Can lead to data leaks and other serious issues. Attackers can manipulate query logic through unsanitized string inputs to bypass checks or extract data they shouldn&rsquo;t have access to — extra care is needed around any user input, especially strings used directly in queries. Use parameterized queries / an ORM instead of building SQL strings from raw input. Hardcoded API key Can be found in the git log or exposed on the frontend. If leaked, an attacker can use the key under your account, potentially causing real financial damage. Use environment variables (.env files) and make sure they&rsquo;re excluded from version control (.gitignore). Vulnerable dependency (PyYAML) Even a project with flawless first-party code isn&rsquo;t safe from this — if a dependency is compromised, your project is compromised too, regardless of how carefully you wrote your own code. Keep dependencies updated and scan them regularly (this is what snyk-scan is for). Findings GitLeaks (push-scoped)
-" />
-<meta name="keywords" content="cybersecurity, writeups, EEE, web-dev, cybersecurity" />
-<meta name="robots" content="noodp" />
-<meta name="theme-color" content="blue" />
-<link rel="canonical" href="http://localhost:1313/projects/devsecops-pipeline/" />
+
+	
+			
+					Tool
+					Category
+			
+	
+	
+			
+					GitLeaks
+					Secret scanning
+			
+			
+					Bandit
+					SAST (Static Application Security Testing)
+			
+			
+					Snyk
+					SCA (Software Composition Analysis)
+			
+	
+
+Architecture / Pipeline
+
+Trigger: the pipeline runs on every push.
+Jobs: secret-scan, secret-scan-full-history, bandit-scan, snyk-scan. All four are separate jobs in the same workflow file with no needs: dependency between them, so GitHub Actions runs them in parallel by default.
 
 
-    <title>
-        
-            DevSecOps-Pipeline :: Portfolio 
-        
-    </title>
+	
+			
+					Job
+					What it does
+			
+	
+	
+			
+					secret-scan
+					Uses GitLeaks to scan the commits included in the current push, checking for secrets (API keys, credentials, etc.) being committed to git.
+			
+			
+					secret-scan-full-history
+					Same tool as secret-scan, but scans the entire git history instead of just the current push, to catch anything left behind or forgotten.
+			
+			
+					bandit-scan
+					Uses Bandit to scan the app&rsquo;s source code for known code-level vulnerabilities.
+			
+			
+					snyk-scan
+					Uses Snyk to scan the app&rsquo;s dependencies for known vulnerabilities.
+			
+	
+
+The Vulnerable App
+
+	
+			
+					Flaw
+					Why it&rsquo;s dangerous
+					How it&rsquo;s fixed
+			
+	
+	
+			
+					SQL injection
+					Can lead to data leaks and other serious issues. Attackers can manipulate query logic through unsanitized string inputs to bypass checks or extract data they shouldn&rsquo;t have access to — extra care is needed around any user input, especially strings used directly in queries.
+					Use parameterized queries / an ORM instead of building SQL strings from raw input.
+			
+			
+					Hardcoded API key
+					Can be found in the git log or exposed on the frontend. If leaked, an attacker can use the key under your account, potentially causing real financial damage.
+					Use environment variables (.env files) and make sure they&rsquo;re excluded from version control (.gitignore).
+			
+			
+					Vulnerable dependency (PyYAML)
+					Even a project with flawless first-party code isn&rsquo;t safe from this — if a dependency is compromised, your project is compromised too, regardless of how carefully you wrote your own code.
+					Keep dependencies updated and scan them regularly (this is what snyk-scan is for).
+			
+	
+
+Findings
 
 
+ GitLeaks (push-scoped)">
+<meta name="author" content="Burak">
+<link rel="canonical" href="http://localhost:1313/projects/devsecops-pipeline/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.00f7505cba790943eca6cbb37853bc63fa91caeb1b400869af98f3ad541f8224.css" integrity="sha256-APdQXLp5CUPspsuzeFO8Y/qRyusbQAhpr5jzrVQfgiQ=" rel="preload stylesheet" as="style">
+<link rel="icon" href="http://localhost:1313/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="http://localhost:1313/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="http://localhost:1313/favicon-32x32.png">
+<link rel="apple-touch-icon" href="http://localhost:1313/apple-touch-icon.png">
+<link rel="mask-icon" href="http://localhost:1313/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<link rel="alternate" hreflang="en" href="http://localhost:1313/projects/devsecops-pipeline/">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
 
+    </style>
+</noscript>
+<script>
+    if (localStorage.getItem("pref-theme") === "light") {
+        document.querySelector("html").dataset.theme = 'light';
+    }
 
-
-  <link rel="stylesheet" href="http://localhost:1313/main.min.7289daf2e88ea2c7b253a51cc5794c7cc17e7aeb7295a19d978db764a5862f25.css" integrity="sha256-cona8uiOoseyU6UcxXlMfMF&#43;eutylaGdl423ZKWGLyU=" crossorigin="anonymous">
-
-
-
-
-
-    <link rel="apple-touch-icon" sizes="180x180" href="http://localhost:1313/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="http://localhost:1313/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="http://localhost:1313/favicon-16x16.png">
-    <link rel="manifest" href="http://localhost:1313/site.webmanifest">
-    <link rel="mask-icon" href="http://localhost:1313/safari-pinned-tab.svg" color="">
-    <link rel="shortcut icon" href="http://localhost:1313/favicon.ico">
-    <meta name="msapplication-TileColor" content="">
-
-
-
-	<meta itemprop="name" content="DevSecOps-Pipeline">
-	<meta itemprop="description" content="A DevSecOps pipeline demo: a deliberately vulnerable app scanned by GitLeaks, Bandit, and Snyk to demonstrate how automated security scanning fits into a real CI/CD workflow.
+</script><meta property="og:url" content="http://localhost:1313/projects/devsecops-pipeline/">
+  <meta property="og:site_name" content="0BuRock0&#39;s Portfolio">
+  <meta property="og:title" content="DevSecOps-Pipeline">
+  <meta property="og:description" content="A DevSecOps pipeline demo: a deliberately vulnerable app scanned by GitLeaks, Bandit, and Snyk to demonstrate how automated security scanning fits into a real CI/CD workflow.
 Overview / Purpose This project demonstrates a basic DevSecOps pipeline to understand how vulnerability scanning works in an actual project, not just in theory.
 Tools used and their category:
 Tool Category GitLeaks Secret scanning Bandit SAST (Static Application Security Testing) Snyk SCA (Software Composition Analysis) Architecture / Pipeline Trigger: the pipeline runs on every push. Jobs: secret-scan, secret-scan-full-history, bandit-scan, snyk-scan. All four are separate jobs in the same workflow file with no needs: dependency between them, so GitHub Actions runs them in parallel by default. Job What it does secret-scan Uses GitLeaks to scan the commits included in the current push, checking for secrets (API keys, credentials, etc.) being committed to git. secret-scan-full-history Same tool as secret-scan, but scans the entire git history instead of just the current push, to catch anything left behind or forgotten. bandit-scan Uses Bandit to scan the app’s source code for known code-level vulnerabilities. snyk-scan Uses Snyk to scan the app’s dependencies for known vulnerabilities. The Vulnerable App Flaw Why it’s dangerous How it’s fixed SQL injection Can lead to data leaks and other serious issues. Attackers can manipulate query logic through unsanitized string inputs to bypass checks or extract data they shouldn’t have access to — extra care is needed around any user input, especially strings used directly in queries. Use parameterized queries / an ORM instead of building SQL strings from raw input. Hardcoded API key Can be found in the git log or exposed on the frontend. If leaked, an attacker can use the key under your account, potentially causing real financial damage. Use environment variables (.env files) and make sure they’re excluded from version control (.gitignore). Vulnerable dependency (PyYAML) Even a project with flawless first-party code isn’t safe from this — if a dependency is compromised, your project is compromised too, regardless of how carefully you wrote your own code. Keep dependencies updated and scan them regularly (this is what snyk-scan is for). Findings GitLeaks (push-scoped)">
-	<meta itemprop="datePublished" content="2026-07-06T00:00:00+00:00">
-	<meta itemprop="dateModified" content="2026-07-06T00:00:00+00:00">
-	<meta itemprop="wordCount" content="994">
-	<meta itemprop="image" content="http://localhost:1313/">
-	<meta itemprop="keywords" content="Web-Dev,Cybersecurity">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="projects">
+    <meta property="article:published_time" content="2026-07-06T00:00:00+00:00">
+    <meta property="article:modified_time" content="2026-07-06T00:00:00+00:00">
+    <meta property="article:tag" content="Web-Dev">
+    <meta property="article:tag" content="Cybersecurity">
 
-	<meta name="twitter:card" content="summary_large_image">
-	<meta name="twitter:image" content="http://localhost:1313/">
-	<meta name="twitter:title" content="DevSecOps-Pipeline">
-	<meta name="twitter:description" content="A DevSecOps pipeline demo: a deliberately vulnerable app scanned by GitLeaks, Bandit, and Snyk to demonstrate how automated security scanning fits into a real CI/CD workflow.
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="DevSecOps-Pipeline">
+  <meta name="twitter:description" content="A DevSecOps pipeline demo: a deliberately vulnerable app scanned by GitLeaks, Bandit, and Snyk to demonstrate how automated security scanning fits into a real CI/CD workflow.
 Overview / Purpose This project demonstrates a basic DevSecOps pipeline to understand how vulnerability scanning works in an actual project, not just in theory.
 Tools used and their category:
 Tool Category GitLeaks Secret scanning Bandit SAST (Static Application Security Testing) Snyk SCA (Software Composition Analysis) Architecture / Pipeline Trigger: the pipeline runs on every push. Jobs: secret-scan, secret-scan-full-history, bandit-scan, snyk-scan. All four are separate jobs in the same workflow file with no needs: dependency between them, so GitHub Actions runs them in parallel by default. Job What it does secret-scan Uses GitLeaks to scan the commits included in the current push, checking for secrets (API keys, credentials, etc.) being committed to git. secret-scan-full-history Same tool as secret-scan, but scans the entire git history instead of just the current push, to catch anything left behind or forgotten. bandit-scan Uses Bandit to scan the app’s source code for known code-level vulnerabilities. snyk-scan Uses Snyk to scan the app’s dependencies for known vulnerabilities. The Vulnerable App Flaw Why it’s dangerous How it’s fixed SQL injection Can lead to data leaks and other serious issues. Attackers can manipulate query logic through unsanitized string inputs to bypass checks or extract data they shouldn’t have access to — extra care is needed around any user input, especially strings used directly in queries. Use parameterized queries / an ORM instead of building SQL strings from raw input. Hardcoded API key Can be found in the git log or exposed on the frontend. If leaked, an attacker can use the key under your account, potentially causing real financial damage. Use environment variables (.env files) and make sure they’re excluded from version control (.gitignore). Vulnerable dependency (PyYAML) Even a project with flawless first-party code isn’t safe from this — if a dependency is compromised, your project is compromised too, regardless of how carefully you wrote your own code. Keep dependencies updated and scan them regularly (this is what snyk-scan is for). Findings GitLeaks (push-scoped)">
 
 
-
-
-
-    <meta property="article:section" content="web-dev" />
-
-    <meta property="article:section" content="cybersecurity" />
-
-
-
-    <meta property="article:published_time" content="2026-07-06 00:00:00 &#43;0000 UTC" />
-
-
-
-
-
-
-
-
-
-
-
-
-    </head>
-
-    
-        <body>
-    
-    
-        <div class="container">
-            <header class="header">
-    <span class="header__inner">
-        <a href="http://localhost:1313/" style="text-decoration: none;">
-    <div class="logo">
-        
-            <span class="logo__mark">&gt;</span>
-            <span class="logo__text ">
-                $ cd /home</span>
-            <span class="logo__cursor" style=
-                  "
-                   
-                   ">
-            </span>
-        
-    </div>
-</a>
-
-
-        <span class="header__right">
-                <nav class="menu">
-    <ul class="menu__inner">
-                <li><a href="http://localhost:1313/projects/">projects</a></li>
-            
-                <li><a href="http://localhost:1313/whoami/">whoami</a></li>
-            
-                <li><a href="http://localhost:1313/writeups/">writeups</a></li>
-            
-    </ul>
-</nav>
-
-
-                <span class="menu-trigger">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                        <path d="M0 0h24v24H0z" fill="none"/>
-                        <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Projects",
+      "item": "http://localhost:1313/projects/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "DevSecOps-Pipeline",
+      "item": "http://localhost:1313/projects/devsecops-pipeline/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "DevSecOps-Pipeline",
+  "name": "DevSecOps-Pipeline",
+  "description": "A DevSecOps pipeline demo: a deliberately vulnerable app scanned by GitLeaks, Bandit, and Snyk to demonstrate how automated security scanning fits into a real CI/CD workflow.\nOverview / Purpose This project demonstrates a basic DevSecOps pipeline to understand how vulnerability scanning works in an actual project, not just in theory.\nTools used and their category:\nTool Category GitLeaks Secret scanning Bandit SAST (Static Application Security Testing) Snyk SCA (Software Composition Analysis) Architecture / Pipeline Trigger: the pipeline runs on every push. Jobs: secret-scan, secret-scan-full-history, bandit-scan, snyk-scan. All four are separate jobs in the same workflow file with no needs: dependency between them, so GitHub Actions runs them in parallel by default. Job What it does secret-scan Uses GitLeaks to scan the commits included in the current push, checking for secrets (API keys, credentials, etc.) being committed to git. secret-scan-full-history Same tool as secret-scan, but scans the entire git history instead of just the current push, to catch anything left behind or forgotten. bandit-scan Uses Bandit to scan the app\u0026rsquo;s source code for known code-level vulnerabilities. snyk-scan Uses Snyk to scan the app\u0026rsquo;s dependencies for known vulnerabilities. The Vulnerable App Flaw Why it\u0026rsquo;s dangerous How it\u0026rsquo;s fixed SQL injection Can lead to data leaks and other serious issues. Attackers can manipulate query logic through unsanitized string inputs to bypass checks or extract data they shouldn\u0026rsquo;t have access to — extra care is needed around any user input, especially strings used directly in queries. Use parameterized queries / an ORM instead of building SQL strings from raw input. Hardcoded API key Can be found in the git log or exposed on the frontend. If leaked, an attacker can use the key under your account, potentially causing real financial damage. Use environment variables (.env files) and make sure they\u0026rsquo;re excluded from version control (.gitignore). Vulnerable dependency (PyYAML) Even a project with flawless first-party code isn\u0026rsquo;t safe from this — if a dependency is compromised, your project is compromised too, regardless of how carefully you wrote your own code. Keep dependencies updated and scan them regularly (this is what snyk-scan is for). Findings GitLeaks (push-scoped)\n",
+  "keywords": [
+    "web-dev", "cybersecurity"
+  ],
+  "articleBody": "A DevSecOps pipeline demo: a deliberately vulnerable app scanned by GitLeaks, Bandit, and Snyk to demonstrate how automated security scanning fits into a real CI/CD workflow.\nOverview / Purpose This project demonstrates a basic DevSecOps pipeline to understand how vulnerability scanning works in an actual project, not just in theory.\nTools used and their category:\nTool Category GitLeaks Secret scanning Bandit SAST (Static Application Security Testing) Snyk SCA (Software Composition Analysis) Architecture / Pipeline Trigger: the pipeline runs on every push. Jobs: secret-scan, secret-scan-full-history, bandit-scan, snyk-scan. All four are separate jobs in the same workflow file with no needs: dependency between them, so GitHub Actions runs them in parallel by default. Job What it does secret-scan Uses GitLeaks to scan the commits included in the current push, checking for secrets (API keys, credentials, etc.) being committed to git. secret-scan-full-history Same tool as secret-scan, but scans the entire git history instead of just the current push, to catch anything left behind or forgotten. bandit-scan Uses Bandit to scan the app’s source code for known code-level vulnerabilities. snyk-scan Uses Snyk to scan the app’s dependencies for known vulnerabilities. The Vulnerable App Flaw Why it’s dangerous How it’s fixed SQL injection Can lead to data leaks and other serious issues. Attackers can manipulate query logic through unsanitized string inputs to bypass checks or extract data they shouldn’t have access to — extra care is needed around any user input, especially strings used directly in queries. Use parameterized queries / an ORM instead of building SQL strings from raw input. Hardcoded API key Can be found in the git log or exposed on the frontend. If leaked, an attacker can use the key under your account, potentially causing real financial damage. Use environment variables (.env files) and make sure they’re excluded from version control (.gitignore). Vulnerable dependency (PyYAML) Even a project with flawless first-party code isn’t safe from this — if a dependency is compromised, your project is compromised too, regardless of how carefully you wrote your own code. Keep dependencies updated and scan them regularly (this is what snyk-scan is for). Findings GitLeaks (push-scoped)\nIn the first run, the GitLeaks job caught the hardcoded API key and flagged it. Later, after adding the Bandit job, GitLeaks stopped flagging anything — even though the key was still sitting in the git history. Digging into this, I found that GitLeaks’ default scan is scoped to the current push, not the full repository history — since I’d only modified and committed the workflow file at that point, the push didn’t include the commit with the key, so there was nothing in that specific push for GitLeaks to catch. This led me to add a second job that runs GitLeaks against the entire git history instead.\nOn a later push, the standard scan passes (no secret in the latest commit), but the full-history scan still fails.\nInside the full-history job, GitLeaks shows exactly which commit introduced the secret and what the leaked value was.\nBandit\nThe app is vulnerable to SQL injection, demonstrated here.\nBandit reports the exact location of the issue, its severity and confidence level, and the corresponding CWE code.\nSnyk\nSnyk flags the pinned vulnerable dependency (PyYAML==5.3.1) with an upgrade suggestion. It also unexpectedly caught a vulnerability in the Flask version used to build the app — a good reminder that these issues can surface anywhere, at any time, which is exactly why dependency scanning needs to run on every change, not just once. A CI job makes that easy to enforce automatically.\nThe GitLeaks Scope Discovery What I observed: I initially assumed the GitLeaks job would re-flag the hardcoded key on every run. It didn’t. What I tested/confirmed: I added a second job to the workflow that scans full git history instead of just the current push, and confirmed it still catches the key that the standard job had stopped flagging. This is what led me to actually understand how GitLeaks’ default scanning behaves, rather than just assuming it worked a certain way. What this means practically: the standard, push-scoped scan is a fast check limited to the latest push — good for catching new secrets as they’re introduced. The full-history scan is slower but far more thorough, and is what you’d rely on to confirm nothing was missed. In production, these serve different purposes: CI-triggered scanning catches new secrets going in; it does not continuously re-audit old history. What I’d Do Differently in Production I’d run the full-history audit periodically rather than on every push — similar to a routine end-of-shift check to confirm nothing slipped through, rather than a scan that runs (and costs time) on every single commit. Other additions I’d consider: branch protection rules that require these status checks to pass before merging to main, and requiring PR review before merge so a second person can catch anything the automated scans miss. Reflection / What I Learned Working through this project taught me how a real security pipeline is structured — which type of tool belongs where, and why. The most valuable lesson was the GitLeaks scope issue: there’s a real difference between using a tool and actually understanding how it behaves by default.\nIf I were describing this project to an interviewer: this was a small, focused look at a DevSecOps pipeline, but the debugging process along the way — a naming mismatch on the Snyk token, a workflow typo, and discovering GitLeaks’ scan-scope limitation firsthand — taught me more than the initial setup itself. It was a simple project to build, but a genuinely valuable one to have built.\nHow to Run It Yourself Clone the repository. Sign up for a free Snyk account and generate a personal API token. In your repo, go to Settings → Secrets and variables → Actions and add a new secret named SNYK_TOKEN with that value. Push to any branch — the pipeline runs automatically on push and all four jobs will execute in parallel. ",
+  "wordCount" : "994",
+  "inLanguage": "en",
+  "datePublished": "2026-07-06T00:00:00Z",
+  "dateModified": "2026-07-06T00:00:00Z",
+  "author":{
+    "@type": "Person",
+    "name": "Burak"
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "http://localhost:1313/projects/devsecops-pipeline/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "0BuRock0's Portfolio",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "http://localhost:1313/favicon.ico"
+    }
+  }
+}
+</script>
+</head>
+<body id="top">
+    <header class="header">
+    <nav class="header-nav">
+        <div class="logo">
+            <a href="http://localhost:1313/" accesskey="h" title="$ cd /home (Alt + H)">$ cd /home</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" class="theme-toggle" accesskey="t" title="(Alt + T)" aria-label="Toggle theme">
+                    <svg class="moon" xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
                     </svg>
-                </span>
-                <span class="theme-toggle not-selectable"><svg class="theme-toggler" width="24" height="24" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-   <path d="M22 41C32.4934 41 41 32.4934 41 22C41 11.5066 32.4934 3 22
-   3C11.5066 3 3 11.5066 3 22C3 32.4934 11.5066 41 22 41ZM7 22C7
-   13.7157 13.7157 7 22 7V37C13.7157 37 7 30.2843 7 22Z"/>
- </svg></span>
-        </span>
-    </span>
-</header>
-
-
-            
-    <div class="content">
-        <main class="post">
-
-            <div class="post-info">
-                
-                </p>
+                    <svg class="sun" xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
             </div>
+        </div>
+        <ul id="menu" class="menu">
+            <li>
+                <a href="http://localhost:1313/whoami/" title="Whoami">
+                    <span>Whoami</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://localhost:1313/projects/" title="Projects">
+                    <span>Projects</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://localhost:1313/writeups/" title="Writeups">
+                    <span>Writeups</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
 
-            <article>
-                <h2 class="post-title"><a href="http://localhost:1313/projects/devsecops-pipeline/">DevSecOps-Pipeline</a></h2>
+<article class="post-single">
+  <header class="post-header">
+    
+    <h1 class="post-title entry-hint-parent">
+      DevSecOps-Pipeline
+    </h1>
+    <div class="post-meta">
 
-                
-                
-                
+<span title='2026-07-06 00:00:00 +0000 UTC'>July 6, 2026</span>&nbsp;·&nbsp;<span>5 min</span>&nbsp;·&nbsp;<span>Burak</span>
 
-                <div class="post-content">
-                    <p>A DevSecOps pipeline demo: a deliberately vulnerable app scanned by GitLeaks, Bandit, and Snyk to demonstrate how automated security scanning fits into a real CI/CD workflow.</p>
-<h2 id="overview--purpose">Overview / Purpose</h2>
+</div>
+  </header> 
+  <div class="post-content md-content"><p>A DevSecOps pipeline demo: a deliberately vulnerable app scanned by GitLeaks, Bandit, and Snyk to demonstrate how automated security scanning fits into a real CI/CD workflow.</p>
+<h2 id="overview--purpose">Overview / Purpose<a hidden class="anchor" aria-hidden="true" href="#overview--purpose">#</a></h2>
 <p>This project demonstrates a basic DevSecOps pipeline to understand how vulnerability scanning works in an actual project, not just in theory.</p>
 <p>Tools used and their category:</p>
 <table>
@@ -182,7 +284,7 @@ Tool Category GitLeaks Secret scanning Bandit SAST (Static Application Security 
 			</tr>
 	</tbody>
 </table>
-<h2 id="architecture--pipeline">Architecture / Pipeline</h2>
+<h2 id="architecture--pipeline">Architecture / Pipeline<a hidden class="anchor" aria-hidden="true" href="#architecture--pipeline">#</a></h2>
 <ul>
 <li><strong>Trigger:</strong> the pipeline runs on every push.</li>
 <li><strong>Jobs:</strong> <code>secret-scan</code>, <code>secret-scan-full-history</code>, <code>bandit-scan</code>, <code>snyk-scan</code>. All four are separate jobs in the same workflow file with no <code>needs:</code> dependency between them, so GitHub Actions runs them in parallel by default.</li>
@@ -213,7 +315,7 @@ Tool Category GitLeaks Secret scanning Bandit SAST (Static Application Security 
 			</tr>
 	</tbody>
 </table>
-<h2 id="the-vulnerable-app">The Vulnerable App</h2>
+<h2 id="the-vulnerable-app">The Vulnerable App<a hidden class="anchor" aria-hidden="true" href="#the-vulnerable-app">#</a></h2>
 <table>
 	<thead>
 			<tr>
@@ -240,45 +342,45 @@ Tool Category GitLeaks Secret scanning Bandit SAST (Static Application Security 
 			</tr>
 	</tbody>
 </table>
-<h2 id="findings">Findings</h2>
+<h2 id="findings">Findings<a hidden class="anchor" aria-hidden="true" href="#findings">#</a></h2>
 <ul>
 <li>
 <p><input checked="" disabled="" type="checkbox"> <strong>GitLeaks (push-scoped)</strong></p>
 <p>In the first run, the GitLeaks job caught the hardcoded API key and flagged it. Later, after adding the Bandit job, GitLeaks stopped flagging anything — even though the key was still sitting in the git history. Digging into this, I found that GitLeaks&rsquo; default scan is scoped to the current push, not the full repository history — since I&rsquo;d only modified and committed the workflow file at that point, the push didn&rsquo;t include the commit with the key, so there was nothing in that specific push for GitLeaks to catch. This led me to add a second job that runs GitLeaks against the entire git history instead.</p>
-<p><img src="screenshots/gitleaks-standard-vs-fullhistory.png" alt="Screenshot: standard scan passes, full-history scan fails">
+<p><img alt="Screenshot: standard scan passes, full-history scan fails" loading="lazy" src="/projects/devsecops-pipeline/screenshots/gitleaks-standard-vs-fullhistory.png">
 <em>On a later push, the standard scan passes (no secret in the latest commit), but the full-history scan still fails.</em></p>
-<p><img src="screenshots/gitleaks-fullhistory-detail.png" alt="Screenshot: full-history scan detail">
+<p><img alt="Screenshot: full-history scan detail" loading="lazy" src="/projects/devsecops-pipeline/screenshots/gitleaks-fullhistory-detail.png">
 <em>Inside the full-history job, GitLeaks shows exactly which commit introduced the secret and what the leaked value was.</em></p>
 </li>
 <li>
 <p><input checked="" disabled="" type="checkbox"> <strong>Bandit</strong></p>
-<p><img src="screenshots/app-intended-use.png" alt="Screenshot: intended use of the app"></p>
-<p><img src="screenshots/sql-injection-demo.png" alt="Screenshot: SQL injection against the app">
+<p><img alt="Screenshot: intended use of the app" loading="lazy" src="/projects/devsecops-pipeline/screenshots/app-intended-use.png"></p>
+<p><img alt="Screenshot: SQL injection against the app" loading="lazy" src="/projects/devsecops-pipeline/screenshots/sql-injection-demo.png">
 <em>The app is vulnerable to SQL injection, demonstrated here.</em></p>
-<p><img src="screenshots/bandit-scan-result.png" alt="Screenshot: Bandit scan result">
+<p><img alt="Screenshot: Bandit scan result" loading="lazy" src="/projects/devsecops-pipeline/screenshots/bandit-scan-result.png">
 <em>Bandit reports the exact location of the issue, its severity and confidence level, and the corresponding CWE code.</em></p>
 </li>
 <li>
 <p><input checked="" disabled="" type="checkbox"> <strong>Snyk</strong></p>
-<p><img src="screenshots/snyk-scan-result.png" alt="Screenshot: Snyk scan result">
+<p><img alt="Screenshot: Snyk scan result" loading="lazy" src="/projects/devsecops-pipeline/screenshots/snyk-scan-result.png">
 <em>Snyk flags the pinned vulnerable dependency (<code>PyYAML==5.3.1</code>) with an upgrade suggestion. It also unexpectedly caught a vulnerability in the Flask version used to build the app — a good reminder that these issues can surface anywhere, at any time, which is exactly why dependency scanning needs to run on every change, not just once. A CI job makes that easy to enforce automatically.</em></p>
 </li>
 </ul>
-<h2 id="the-gitleaks-scope-discovery">The GitLeaks Scope Discovery</h2>
+<h2 id="the-gitleaks-scope-discovery">The GitLeaks Scope Discovery<a hidden class="anchor" aria-hidden="true" href="#the-gitleaks-scope-discovery">#</a></h2>
 <ul>
 <li><strong>What I observed:</strong> I initially assumed the GitLeaks job would re-flag the hardcoded key on every run. It didn&rsquo;t.</li>
 <li><strong>What I tested/confirmed:</strong> I added a second job to the workflow that scans full git history instead of just the current push, and confirmed it still catches the key that the standard job had stopped flagging. This is what led me to actually understand how GitLeaks&rsquo; default scanning behaves, rather than just assuming it worked a certain way.</li>
 <li><strong>What this means practically:</strong> the standard, push-scoped scan is a fast check limited to the latest push — good for catching <em>new</em> secrets as they&rsquo;re introduced. The full-history scan is slower but far more thorough, and is what you&rsquo;d rely on to confirm nothing was missed. In production, these serve different purposes: CI-triggered scanning catches new secrets going in; it does not continuously re-audit old history.</li>
 </ul>
-<h2 id="what-id-do-differently-in-production">What I&rsquo;d Do Differently in Production</h2>
+<h2 id="what-id-do-differently-in-production">What I&rsquo;d Do Differently in Production<a hidden class="anchor" aria-hidden="true" href="#what-id-do-differently-in-production">#</a></h2>
 <ul>
 <li>I&rsquo;d run the full-history audit periodically rather than on every push — similar to a routine end-of-shift check to confirm nothing slipped through, rather than a scan that runs (and costs time) on every single commit.</li>
 <li>Other additions I&rsquo;d consider: branch protection rules that require these status checks to pass before merging to <code>main</code>, and requiring PR review before merge so a second person can catch anything the automated scans miss.</li>
 </ul>
-<h2 id="reflection--what-i-learned">Reflection / What I Learned</h2>
+<h2 id="reflection--what-i-learned">Reflection / What I Learned<a hidden class="anchor" aria-hidden="true" href="#reflection--what-i-learned">#</a></h2>
 <p>Working through this project taught me how a real security pipeline is structured — which type of tool belongs where, and why. The most valuable lesson was the GitLeaks scope issue: there&rsquo;s a real difference between <em>using</em> a tool and actually <em>understanding</em> how it behaves by default.</p>
 <p>If I were describing this project to an interviewer: this was a small, focused look at a DevSecOps pipeline, but the debugging process along the way — a naming mismatch on the Snyk token, a workflow typo, and discovering GitLeaks&rsquo; scan-scope limitation firsthand — taught me more than the initial setup itself. It was a simple project to build, but a genuinely valuable one to have built.</p>
-<h2 id="how-to-run-it-yourself">How to Run It Yourself</h2>
+<h2 id="how-to-run-it-yourself">How to Run It Yourself<a hidden class="anchor" aria-hidden="true" href="#how-to-run-it-yourself">#</a></h2>
 <ol>
 <li>Clone the repository.</li>
 <li>Sign up for a free <a href="https://snyk.io">Snyk</a> account and generate a personal API token.</li>
@@ -286,68 +388,143 @@ Tool Category GitLeaks Secret scanning Bandit SAST (Static Application Security 
 <li>Push to any branch — the pipeline runs automatically on push and all four jobs will execute in parallel.</li>
 </ol>
 
-                </div>
-            </article>
 
-            <hr />
+  </div>
 
-            <div class="post-info">
-                
-    <p>
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag meta-icon"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7" y2="7"></line></svg>
-
-        <span class="tag"><a href="http://localhost:1313/tags/web-dev/">web-dev</a></span>
-        <span class="tag"><a href="http://localhost:1313/tags/cybersecurity/">cybersecurity</a></span>
-        
-    </p>
-
-                
-    <p>
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-folder meta-icon"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
-
-        <span class="tag"><a href="http://localhost:1313/categories/web-dev/">web-dev</a></span>
-        <span class="tag"><a href="http://localhost:1313/categories/cybersecurity/">cybersecurity</a></span>
-        
-    </p>
-
-            </div>
-        </main>
-    </div>
-
-
-            
-                <footer class="footer">
+  <footer class="post-footer">
+    <ul class="post-tags">
+      <li><a href="http://localhost:1313/tags/web-dev/">Web-Dev</a></li>
+      <li><a href="http://localhost:1313/tags/cybersecurity/">Cybersecurity</a></li>
+    </ul>
+  </footer>
+</article>
+    </main>
     
-    <div class="footer__inner">
-        <div class="footer__content">
-            <span>&copy; 2026</span>
-            <span><a href="http://localhost:1313/">Burak</a></span>
-            <span></span>
-            <span><a href="http://localhost:1313/posts/index.xml" target="_blank" title="rss"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-rss"><path d="M4 11a9 9 0 0 1 9 9"></path><path d="M4 4a16 16 0 0 1 16 16"></path><circle cx="5" cy="19" r="1"></circle></svg></a></span>
-            
-        </div>
-    </div>
+<footer class="footer">
+        <span>&copy; 2026 <a href="http://localhost:1313/">0BuRock0&#39;s Portfolio</a></span> · 
+
     
     
-    <div class="footer__inner">
-        <div class="footer__content">
-            <span>Powered by <a href="http://gohugo.io">Hugo</a></span><span>Made with &#10084; by <a href="https://github.com/rhazdon">Djordje Atlialp</a></span>
-        </div>
-    </div>
-    
+    <span>
+        Powered by
+        <a href="https://gohugo.io/?utm_source=papermod" rel="noopener" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
 </footer>
+<a href="#top" id="top-link" class="top-link hidden" aria-label="go to top" title="Go to Top (Alt + G)" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+        stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevrons-up">
+        <polyline points="17 11 12 6 7 11"></polyline>
+        <polyline points="17 18 12 13 7 18"></polyline>
+    </svg>
+</a>
 
-            
-        </div>
-
+<script>
+    let menu = document.getElementById('menu');
+    if (menu) {
         
+        const scrollPosition = localStorage.getItem("menu-scroll-position");
+        if (scrollPosition) {
+            menu.scrollLeft = parseInt(scrollPosition, 10);
+        }
+        
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
 
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
 
+</script>
+<script>
+    var toplink = document.getElementById("top-link");
+    window.onscroll = function () {
+        const scrollThreshold = window.innerHeight;
+        if (document.body.scrollTop > scrollThreshold || document.documentElement.scrollTop > scrollThreshold) {
+            toplink.classList.remove("hidden");
+        } else {
+            toplink.classList.add("hidden");
+        }
+    };
 
-<script type="text/javascript" src="http://localhost:1313/bundle.min.08b680078a3cf9c69e3dd217a5aa52cfddd4a1d850f8cdff127fdd7421a71f8b2b474be69386f67819edace92273916e7230c9054f38107db9dc6730b3530ab5.js" integrity="sha512-CLaAB4o8&#43;caePdIXpapSz93UodhQ&#43;M3/En/ddCGnH4srR0vmk4b2eBntrOkic5FucjDJBU84EH253Gcws1MKtQ=="></script>
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        const html = document.querySelector("html");
+        if (html.dataset.theme === "dark") {
+            html.dataset.theme = 'light';
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            html.dataset.theme = 'dark';
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
 
+</script>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
 
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerHTML = 'copy';
 
+        function copyingDone() {
+            copybutton.innerHTML = 'copied!';
+            setTimeout(() => {
+                copybutton.innerHTML = 'copy';
+            }, 2000);
+        }
 
-    </body>
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                navigator.clipboard.writeText(codeblock.textContent);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
+</script>
+</body>
+
 </html>

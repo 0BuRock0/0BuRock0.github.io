@@ -1,105 +1,67 @@
 baseURL = "https://0BuRock0.github.io/"
-title   = "Portfolio"
+title = "0BuRock0's Portfolio"
+theme = "PaperMod"
 languageCode = "en-us"
-theme = "hello-friend-ng"
-
-PygmentsCodeFences = true
-PygmentsStyle = "monokai"
-
-#buildDrafts  = false#
-canonifyURLs = true
-
-enableRobotsTXT = true
-enableGitInfo   = false
-enableEmoji     = true
-
-[permalinks]
-  writeups = "/writeups/:year/:month/:title/"  
-  projects = "/projects/:title/"
-
-[markup]
-  [markup.goldmark]
-    [markup.goldmark.renderer]
-      hrefTargetBlank = true
 
 [params]
-  dateform        = "Jan 2, 2006"
-  dateformShort   = "Jan 2"
-  dateformNum     = "2006-01-02"
-  dateformNumTime = "2006-01-02 15:04"
-
-  description = "My Portfolio Page"
-  keywords = "cybersecurity, writeups, EEE"
-  images = [""]
-
-  homeSubtitle = "Hello Friend NG"
-  disableReadOtherPosts = false
-
-  # --- TEMA SEÇENEKLERİ (THEME OPTIONS) ---
-  enableThemeToggle = true
-  # Seçenekler: "orange", "blue", "red", "green", "pink"
-  themeColor = "blue" 
+  env = "production"
+  description = "Electrical & Electronics Engineering Student | Security Researcher"
+  author = "Burak"
   
-  enableSharingButtons = true
-  enableReadingTime = true
-  enableGlobalLanguageMenu = false
+  # Varsayılan temayı karanlık yapıyoruz
+  defaultTheme = "dark"
+  
+  # Okuma süresi ve paylaşım butonları
+  ShowReadingTime = true
+  ShowShareButtons = false
+  ShowCodeCopyButtons = true # Kod bloklarına "Kopyala" butonu ekler
+  
+  # Sol üstteki terminal logosu
+  [params.label]
+    text = "$ cd /home"
+    icon = ""
+    iconHeight = 35
+  
 
-  customCSS = []
-  customJS  = []
+  [params.profileMode]
+    enabled = true
+    title = "Burak"
+    subtitle = "Electrical & Electronics Engineering Student | Certified Associate Penetration Tester"
+    
+    # Sosyal medya ikonlarının altındaki butonlar (İsteğe bağlı)
+    [[params.profileMode.buttons]]
+      name = "Projects"
+      url = "/projects/"
+    [[params.profileMode.buttons]]
+      name = "Writeups"
+      url = "/writeups/"
+    [[params.profileMode.buttons]]
+      name = "whoami"
+      url = "/whoami/"
 
-  [params.author]
-    name = "Burak"
 
-  [params.footer]
-    trademark = 2026
-    rss = true
-    copyright = true
-    author = true
-
-    topText = []
-    bottomText = [
-      "Powered by <a href=\"http://gohugo.io\">Hugo</a>",
-      "Made with &#10084; by <a href=\"https://github.com/rhazdon\">Djordje Atlialp</a>"
-    ]
-
-  [params.favicon.color]
-    mask = "#1b1c1d"
-    msapplication = "#1b1c1d"
-    theme = "#1b1c1d"
-
-  [params.logo]
-    logoMark     = ">"
-    logoText     = "$ cd /home"
-    logoHomeLink = "/"
-
-  # --- SOSYAL MEDYA HESAPLARI ---
-  [[params.social]]
+  # Sosyal medya ikonları
+  [[params.socialIcons]]
     name = "github"
-    url  = "https://github.com/"
-
-  [[params.social]]
+    url = "https://github.com/0BuRock0"
+  [[params.socialIcons]]
     name = "linkedin"
-    url  = "https://www.linkedin.com/"
+    url = "https://www.linkedin.com/in/burak-baştürk/"
 
-  [[params.social]]
-    name = "email"
-    url  = "mailto:nobody@example.com"
-
+# Menü Yapılandırması (PaperMod'da sorunsuz çalışır)
 [menu]
   [[menu.main]]
     identifier = "whoami"
-    name       = "whoami"
-    url        = "/whoami/"
-    weight     = 1 # Menüdeki sırası (1. sırada)
-
+    name = "Whoami"
+    url = "/whoami/"
+    weight = 10
   [[menu.main]]
     identifier = "projects"
-    name       = "projects"
-    url        = "/projects/"
-    weight     = 2  # Menüdeki sırası (2. sırada)
-
+    name = "Projects"
+    url = "/projects/"
+    weight = 20
   [[menu.main]]
     identifier = "writeups"
-    name       = "writeups"
-    url        = "/writeups/"
-    weight     = 3  # Menüdeki sırası (3. sırada)
+    name = "Writeups"
+    url = "/writeups/"
+    weight = 30
