@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto" data-theme="dark">
+
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="noindex, nofollow">
+<title>DevSecOps-Pipeline | 0BuRock0</title>
+<meta name="keywords" content="web-dev, cybersecurity">
+<meta name="description" content="Home Lab Security Pipeline
+A DevSecOps pipeline demo: a deliberately vulnerable app scanned by GitLeaks, Bandit, and Snyk to demonstrate how automated security scanning fits into a real CI/CD workflow.
+Overview / Purpose
+This project demonstrates a basic DevSecOps pipeline to understand how vulnerability scanning works in an actual project, not just in theory.
+Tools used and their category:
+
+	
+			
+					Tool
+					Category
+			
+	
+	
+			
+					GitLeaks
+					Secret scanning
+			
+			
+					Bandit
+					SAST (Static Application Security Testing)
+			
+			
+					Snyk
+					SCA (Software Composition Analysis)
+			
+	
+
+Architecture / Pipeline
+
+Trigger: the pipeline runs on every push.
+Jobs: secret-scan, secret-scan-full-history, bandit-scan, snyk-scan. All four are separate jobs in the same workflow file with no needs: dependency between them, so GitHub Actions runs them in parallel by default.
+
+
+	
+			
+					Job
+					What it does
+			
+	
+	
+			
+					secret-scan
+					Uses GitLeaks to scan the commits included in the current push, checking for secrets (API keys, credentials, etc.) being committed to git.
+			
+			
+					secret-scan-full-history
+					Same tool as secret-scan, but scans the entire git history instead of just the current push, to catch anything left behind or forgotten.
+			
+			
+					bandit-scan
+					Uses Bandit to scan the app&rsquo;s source code for known code-level vulnerabilities.
+			
+			
+					snyk-scan
+					Uses Snyk to scan the app&rsquo;s dependencies for known vulnerabilities.
+			
+	
+
+The Vulnerable App
+
+	
+			
+					Flaw
+					Why it&rsquo;s dangerous
+					How it&rsquo;s fixed
+			
+	
+	
+			
+					SQL injection
+					Can lead to data leaks and other serious issues. Attackers can manipulate query logic through unsanitized string inputs to bypass checks or extract data they shouldn&rsquo;t have access to — extra care is needed around any user input, especially strings used directly in queries.
+					Use parameterized queries / an ORM instead of building SQL strings from raw input.
+			
+			
+					Hardcoded API key
+					Can be found in the git log or exposed on the frontend. If leaked, an attacker can use the key under your account, potentially causing real financial damage.
+					Use environment variables (.env files) and make sure they&rsquo;re excluded from version control (.gitignore).
+			
+			
+					Vulnerable dependency (PyYAML)
+					Even a project with flawless first-party code isn&rsquo;t safe from this — if a dependency is compromised, your project is compromised too, regardless of how carefully you wrote your own code.
+					Keep dependencies updated and scan them regularly (this is what snyk-scan is for).
+			
+	
+
+Findings
+
+
+ GitLeaks (push-scoped)">
+<meta name="author" content="">
+<link rel="canonical" href="http://localhost:1313/projects/devsecops-pipeline/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.cd9298b33628769aa1bc1acebbbfd7aa11ce81dfe03484d479e1907760249a1d.css" integrity="sha256-zZKYszYodpqhvBrOu7/XqhHOgd/gNITUeeGQd2Akmh0=" rel="preload stylesheet" as="style">
+<link rel="icon" href="http://localhost:1313/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="http://localhost:1313/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="http://localhost:1313/favicon-32x32.png">
+<link rel="apple-touch-icon" href="http://localhost:1313/apple-touch-icon.png">
+<link rel="mask-icon" href="http://localhost:1313/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<link rel="alternate" hreflang="en" href="http://localhost:1313/projects/devsecops-pipeline/">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+</noscript>
+<script>
+    if (localStorage.getItem("pref-theme") === "light") {
+        document.querySelector("html").dataset.theme = 'light';
+    }
+
+</script>
+</head>
+<body id="top">
+    <header class="header">
+    <nav class="header-nav">
+        <div class="logo">
+            <a href="http://localhost:1313/" accesskey="h" title="0BuRock0 (Alt + H)">0BuRock0</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" class="theme-toggle" accesskey="t" title="(Alt + T)" aria-label="Toggle theme">
+                    <svg class="moon" xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg class="sun" xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu" class="menu">
+            <li>
+                <a href="http://localhost:1313/whoami/" title="whoami">
+                    <span>whoami</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://localhost:1313/projects/" title="Projects">
+                    <span>Projects</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://localhost:1313/writeups/" title="Writeups">
+                    <span>Writeups</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    <nav class="breadcrumbs" role="navigation" aria-label="Breadcrumb">
+            <a href="/">Home</a>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right">
+                <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+            <a href="/projects/">Projects</a>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+        stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right">
+        <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+</nav>
+    <h1 class="post-title entry-hint-parent">
+      DevSecOps-Pipeline
+    </h1>
+    <div class="post-meta">
+
+<span title='2026-07-06 00:00:00 +0000 UTC'>July 6, 2026</span>&nbsp;·&nbsp;<span>5 min</span>
+
+</div>
+  </header> 
+  <div class="post-content md-content"><h1 id="home-lab-security-pipeline">Home Lab Security Pipeline<a hidden class="anchor" aria-hidden="true" href="#home-lab-security-pipeline">#</a></h1>
+<p>A DevSecOps pipeline demo: a deliberately vulnerable app scanned by GitLeaks, Bandit, and Snyk to demonstrate how automated security scanning fits into a real CI/CD workflow.</p>
+<h2 id="overview--purpose">Overview / Purpose<a hidden class="anchor" aria-hidden="true" href="#overview--purpose">#</a></h2>
+<p>This project demonstrates a basic DevSecOps pipeline to understand how vulnerability scanning works in an actual project, not just in theory.</p>
+<p>Tools used and their category:</p>
+<table>
+	<thead>
+			<tr>
+					<th>Tool</th>
+					<th>Category</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>GitLeaks</td>
+					<td>Secret scanning</td>
+			</tr>
+			<tr>
+					<td>Bandit</td>
+					<td>SAST (Static Application Security Testing)</td>
+			</tr>
+			<tr>
+					<td>Snyk</td>
+					<td>SCA (Software Composition Analysis)</td>
+			</tr>
+	</tbody>
+</table>
+<h2 id="architecture--pipeline">Architecture / Pipeline<a hidden class="anchor" aria-hidden="true" href="#architecture--pipeline">#</a></h2>
+<ul>
+<li><strong>Trigger:</strong> the pipeline runs on every push.</li>
+<li><strong>Jobs:</strong> <code>secret-scan</code>, <code>secret-scan-full-history</code>, <code>bandit-scan</code>, <code>snyk-scan</code>. All four are separate jobs in the same workflow file with no <code>needs:</code> dependency between them, so GitHub Actions runs them in parallel by default.</li>
+</ul>
+<table>
+	<thead>
+			<tr>
+					<th>Job</th>
+					<th>What it does</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><code>secret-scan</code></td>
+					<td>Uses GitLeaks to scan the commits included in the current push, checking for secrets (API keys, credentials, etc.) being committed to git.</td>
+			</tr>
+			<tr>
+					<td><code>secret-scan-full-history</code></td>
+					<td>Same tool as <code>secret-scan</code>, but scans the entire git history instead of just the current push, to catch anything left behind or forgotten.</td>
+			</tr>
+			<tr>
+					<td><code>bandit-scan</code></td>
+					<td>Uses Bandit to scan the app&rsquo;s source code for known code-level vulnerabilities.</td>
+			</tr>
+			<tr>
+					<td><code>snyk-scan</code></td>
+					<td>Uses Snyk to scan the app&rsquo;s dependencies for known vulnerabilities.</td>
+			</tr>
+	</tbody>
+</table>
+<h2 id="the-vulnerable-app">The Vulnerable App<a hidden class="anchor" aria-hidden="true" href="#the-vulnerable-app">#</a></h2>
+<table>
+	<thead>
+			<tr>
+					<th>Flaw</th>
+					<th>Why it&rsquo;s dangerous</th>
+					<th>How it&rsquo;s fixed</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><strong>SQL injection</strong></td>
+					<td>Can lead to data leaks and other serious issues. Attackers can manipulate query logic through unsanitized string inputs to bypass checks or extract data they shouldn&rsquo;t have access to — extra care is needed around any user input, especially strings used directly in queries.</td>
+					<td>Use parameterized queries / an ORM instead of building SQL strings from raw input.</td>
+			</tr>
+			<tr>
+					<td><strong>Hardcoded API key</strong></td>
+					<td>Can be found in the git log or exposed on the frontend. If leaked, an attacker can use the key under your account, potentially causing real financial damage.</td>
+					<td>Use environment variables (<code>.env</code> files) and make sure they&rsquo;re excluded from version control (<code>.gitignore</code>).</td>
+			</tr>
+			<tr>
+					<td><strong>Vulnerable dependency (PyYAML)</strong></td>
+					<td>Even a project with flawless first-party code isn&rsquo;t safe from this — if a dependency is compromised, your project is compromised too, regardless of how carefully you wrote your own code.</td>
+					<td>Keep dependencies updated and scan them regularly (this is what <code>snyk-scan</code> is for).</td>
+			</tr>
+	</tbody>
+</table>
+<h2 id="findings">Findings<a hidden class="anchor" aria-hidden="true" href="#findings">#</a></h2>
+<ul>
+<li>
+<p><input checked="" disabled="" type="checkbox"> <strong>GitLeaks (push-scoped)</strong></p>
+<p>In the first run, the GitLeaks job caught the hardcoded API key and flagged it. Later, after adding the Bandit job, GitLeaks stopped flagging anything — even though the key was still sitting in the git history. Digging into this, I found that GitLeaks&rsquo; default scan is scoped to the current push, not the full repository history — since I&rsquo;d only modified and committed the workflow file at that point, the push didn&rsquo;t include the commit with the key, so there was nothing in that specific push for GitLeaks to catch. This led me to add a second job that runs GitLeaks against the entire git history instead.</p>
+<p><img alt="Screenshot: standard scan passes, full-history scan fails" loading="lazy" src="/projects/devsecops-pipeline/screenshots/gitleaks-standard-vs-fullhistory.png">
+<em>On a later push, the standard scan passes (no secret in the latest commit), but the full-history scan still fails.</em></p>
+<p><img alt="Screenshot: full-history scan detail" loading="lazy" src="/projects/devsecops-pipeline/screenshots/gitleaks-fullhistory-detail.png">
+<em>Inside the full-history job, GitLeaks shows exactly which commit introduced the secret and what the leaked value was.</em></p>
+</li>
+<li>
+<p><input checked="" disabled="" type="checkbox"> <strong>Bandit</strong></p>
+<p><img alt="Screenshot: intended use of the app" loading="lazy" src="/projects/devsecops-pipeline/screenshots/app-intended-use.png"></p>
+<p><img alt="Screenshot: SQL injection against the app" loading="lazy" src="/projects/devsecops-pipeline/screenshots/sql-injection-demo.png">
+<em>The app is vulnerable to SQL injection, demonstrated here.</em></p>
+<p><img alt="Screenshot: Bandit scan result" loading="lazy" src="/projects/devsecops-pipeline/screenshots/bandit-scan-result.png">
+<em>Bandit reports the exact location of the issue, its severity and confidence level, and the corresponding CWE code.</em></p>
+</li>
+<li>
+<p><input checked="" disabled="" type="checkbox"> <strong>Snyk</strong></p>
+<p><img alt="Screenshot: Snyk scan result" loading="lazy" src="/projects/devsecops-pipeline/screenshots/snyk-scan-result.png">
+<em>Snyk flags the pinned vulnerable dependency (<code>PyYAML==5.3.1</code>) with an upgrade suggestion. It also unexpectedly caught a vulnerability in the Flask version used to build the app — a good reminder that these issues can surface anywhere, at any time, which is exactly why dependency scanning needs to run on every change, not just once. A CI job makes that easy to enforce automatically.</em></p>
+</li>
+</ul>
+<h2 id="the-gitleaks-scope-discovery">The GitLeaks Scope Discovery<a hidden class="anchor" aria-hidden="true" href="#the-gitleaks-scope-discovery">#</a></h2>
+<ul>
+<li><strong>What I observed:</strong> I initially assumed the GitLeaks job would re-flag the hardcoded key on every run. It didn&rsquo;t.</li>
+<li><strong>What I tested/confirmed:</strong> I added a second job to the workflow that scans full git history instead of just the current push, and confirmed it still catches the key that the standard job had stopped flagging. This is what led me to actually understand how GitLeaks&rsquo; default scanning behaves, rather than just assuming it worked a certain way.</li>
+<li><strong>What this means practically:</strong> the standard, push-scoped scan is a fast check limited to the latest push — good for catching <em>new</em> secrets as they&rsquo;re introduced. The full-history scan is slower but far more thorough, and is what you&rsquo;d rely on to confirm nothing was missed. In production, these serve different purposes: CI-triggered scanning catches new secrets going in; it does not continuously re-audit old history.</li>
+</ul>
+<h2 id="what-id-do-differently-in-production">What I&rsquo;d Do Differently in Production<a hidden class="anchor" aria-hidden="true" href="#what-id-do-differently-in-production">#</a></h2>
+<ul>
+<li>I&rsquo;d run the full-history audit periodically rather than on every push — similar to a routine end-of-shift check to confirm nothing slipped through, rather than a scan that runs (and costs time) on every single commit.</li>
+<li>Other additions I&rsquo;d consider: branch protection rules that require these status checks to pass before merging to <code>main</code>, and requiring PR review before merge so a second person can catch anything the automated scans miss.</li>
+</ul>
+<h2 id="reflection--what-i-learned">Reflection / What I Learned<a hidden class="anchor" aria-hidden="true" href="#reflection--what-i-learned">#</a></h2>
+<p>Working through this project taught me how a real security pipeline is structured — which type of tool belongs where, and why. The most valuable lesson was the GitLeaks scope issue: there&rsquo;s a real difference between <em>using</em> a tool and actually <em>understanding</em> how it behaves by default.</p>
+<p>If I were describing this project to an interviewer: this was a small, focused look at a DevSecOps pipeline, but the debugging process along the way — a naming mismatch on the Snyk token, a workflow typo, and discovering GitLeaks&rsquo; scan-scope limitation firsthand — taught me more than the initial setup itself. It was a simple project to build, but a genuinely valuable one to have built.</p>
+<h2 id="how-to-run-it-yourself">How to Run It Yourself<a hidden class="anchor" aria-hidden="true" href="#how-to-run-it-yourself">#</a></h2>
+<ol>
+<li>Clone the repository.</li>
+<li>Sign up for a free <a href="https://snyk.io">Snyk</a> account and generate a personal API token.</li>
+<li>In your repo, go to <strong>Settings → Secrets and variables → Actions</strong> and add a new secret named <code>SNYK_TOKEN</code> with that value.</li>
+<li>Push to any branch — the pipeline runs automatically on push and all four jobs will execute in parallel.</li>
+</ol>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+      <li><a href="http://localhost:1313/tags/web-dev/">Web-Dev</a></li>
+      <li><a href="http://localhost:1313/tags/cybersecurity/">Cybersecurity</a></li>
+    </ul>
+<nav class="paginav">
+  <a class="next" href="http://localhost:1313/projects/pihole-adblocker/pihole-writeup/">
+    <span class="title">Next »</span>
+    <span>Self-Hosted, Encrypted DNS Ad &amp; Tracker Blocking with Pi-hole</span>
+  </a>
+</nav>
+
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+        <span>&copy; 2026 <a href="http://localhost:1313/">0BuRock0</a></span> · 
+
+    
+    
+    <span>
+        Powered by
+        <a href="https://gohugo.io/?utm_source=papermod" rel="noopener" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" id="top-link" class="top-link hidden" aria-label="go to top" title="Go to Top (Alt + G)" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+        stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevrons-up">
+        <polyline points="17 11 12 6 7 11"></polyline>
+        <polyline points="17 18 12 13 7 18"></polyline>
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu');
+    if (menu) {
+        
+        const scrollPosition = localStorage.getItem("menu-scroll-position");
+        if (scrollPosition) {
+            menu.scrollLeft = parseInt(scrollPosition, 10);
+        }
+        
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var toplink = document.getElementById("top-link");
+    window.onscroll = function () {
+        const scrollThreshold = window.innerHeight;
+        if (document.body.scrollTop > scrollThreshold || document.documentElement.scrollTop > scrollThreshold) {
+            toplink.classList.remove("hidden");
+        } else {
+            toplink.classList.add("hidden");
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        const html = document.querySelector("html");
+        if (html.dataset.theme === "dark") {
+            html.dataset.theme = 'light';
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            html.dataset.theme = 'dark';
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerHTML = 'copy';
+
+        function copyingDone() {
+            copybutton.innerHTML = 'copied!';
+            setTimeout(() => {
+                copybutton.innerHTML = 'copy';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                navigator.clipboard.writeText(codeblock.textContent);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
+</script>
+</body>
+
+</html>

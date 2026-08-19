@@ -88,6 +88,24 @@
 
 <article class="first-entry"> 
   <header class="entry-header">
+    <h2 class="entry-hint-parent">DevSecOps-Pipeline
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>Home Lab Security Pipeline A DevSecOps pipeline demo: a deliberately vulnerable app scanned by GitLeaks, Bandit, and Snyk to demonstrate how automated security scanning fits into a real CI/CD workflow.
+Overview / Purpose This project demonstrates a basic DevSecOps pipeline to understand how vulnerability scanning works in an actual project, not just in theory.
+Tools used and their category:
+Tool Category GitLeaks Secret scanning Bandit SAST (Static Application Security Testing) Snyk SCA (Software Composition Analysis) Architecture / Pipeline Trigger: the pipeline runs on every push. Jobs: secret-scan, secret-scan-full-history, bandit-scan, snyk-scan. All four are separate jobs in the same workflow file with no needs: dependency between them, so GitHub Actions runs them in parallel by default. Job What it does secret-scan Uses GitLeaks to scan the commits included in the current push, checking for secrets (API keys, credentials, etc.) being committed to git. secret-scan-full-history Same tool as secret-scan, but scans the entire git history instead of just the current push, to catch anything left behind or forgotten. bandit-scan Uses Bandit to scan the app’s source code for known code-level vulnerabilities. snyk-scan Uses Snyk to scan the app’s dependencies for known vulnerabilities. The Vulnerable App Flaw Why it’s dangerous How it’s fixed SQL injection Can lead to data leaks and other serious issues. Attackers can manipulate query logic through unsanitized string inputs to bypass checks or extract data they shouldn’t have access to — extra care is needed around any user input, especially strings used directly in queries. Use parameterized queries / an ORM instead of building SQL strings from raw input. Hardcoded API key Can be found in the git log or exposed on the frontend. If leaked, an attacker can use the key under your account, potentially causing real financial damage. Use environment variables (.env files) and make sure they’re excluded from version control (.gitignore). Vulnerable dependency (PyYAML) Even a project with flawless first-party code isn’t safe from this — if a dependency is compromised, your project is compromised too, regardless of how carefully you wrote your own code. Keep dependencies updated and scan them regularly (this is what snyk-scan is for). Findings GitLeaks (push-scoped)
+...</p>
+  </div>
+  <footer class="entry-footer">
+
+<span title='2026-07-06 00:00:00 +0000 UTC'>July 6, 2026</span>&nbsp;·&nbsp;<span>5 min</span></footer>
+  <a class="entry-link" aria-label="post link to DevSecOps-Pipeline" href="http://localhost:1313/projects/devsecops-pipeline/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
     <h2 class="entry-hint-parent">Self-Hosted, Encrypted DNS Ad &amp; Tracker Blocking with Pi-hole
     </h2>
   </header>
@@ -99,7 +117,7 @@ Overview / Purpose I wanted to actually understand DNS resolution instead of jus
   <footer class="entry-footer">
 
 <span>9 min</span></footer>
-  <a class="entry-link" aria-label="post link to Self-Hosted, Encrypted DNS Ad & Tracker Blocking with Pi-hole" href="http://localhost:1313/projects/pihole-adblocker/pihole-writeup-filled/"></a>
+  <a class="entry-link" aria-label="post link to Self-Hosted, Encrypted DNS Ad & Tracker Blocking with Pi-hole" href="http://localhost:1313/projects/pihole-adblocker/pihole-writeup/"></a>
 </article>
     </main>
     

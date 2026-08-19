@@ -132,5 +132,3 @@ It also changed how I think about picking a security protocol, and about stackin
 5. In Pi-hole, set the upstream to Custom DNS `127.0.0.1#5053` and turn on DNSSEC
 
 ---
-
-*Tags: cybersecurity, networking, self-hosting*
