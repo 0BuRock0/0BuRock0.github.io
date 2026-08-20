@@ -4,6 +4,7 @@ theme = "PaperMod"
 languageCode = "en-us"
 
 [params]
+  favicon = "favicon.png" 
   env = "production"
   description = "Electrical & Electronics Engineering Student | Security Researcher"
   author = "Burak"
