@@ -1,8 +1,10 @@
 ---
-title: Self-Hosted, Encrypted DNS Ad & Tracker Blocking with Pi-hole
+title: Ad & Tracker Blocking with Pi-hole
+date: 2026-08-19
+draft: false
+categories: [cybersecurity, networking]
+tags: [cybersecurity, networking, self-hosting]
 ---
-
-## Self-Hosted, Encrypted DNS Ad & Tracker Blocking with Pi-hole
 
 I got tired of relying on browser extensions to block ads and decided to build the thing myself: a local, containerized DNS filter running on my Mac that blocks ads and trackers before they ever load, with encrypted DNS on top so my traffic isn't sitting in plaintext on whatever café WiFi I happen to be on.
 

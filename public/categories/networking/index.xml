@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Networking on 0BuRock0&#39;s Portfolio</title>
+    <link>http://localhost:1313/categories/networking/</link>
+    <description>Recent content in Networking on 0BuRock0&#39;s Portfolio</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 19 Aug 2026 00:00:00 +0000</lastBuildDate>
+    <atom:link href="http://localhost:1313/categories/networking/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Ad &amp; Tracker Blocking with Pi-hole</title>
+      <link>http://localhost:1313/projects/pihole-adblocker/</link>
+      <pubDate>Wed, 19 Aug 2026 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/projects/pihole-adblocker/</guid>
+      <description>&lt;h2 id=&#34;self-hosted-encrypted-dns-ad--tracker-blocking-with-pi-hole&#34;&gt;Self-Hosted, Encrypted DNS Ad &amp;amp; Tracker Blocking with Pi-hole&lt;/h2&gt;
+&lt;p&gt;I got tired of relying on browser extensions to block ads and decided to build the thing myself: a local, containerized DNS filter running on my Mac that blocks ads and trackers before they ever load, with encrypted DNS on top so my traffic isn&amp;rsquo;t sitting in plaintext on whatever café WiFi I happen to be on.&lt;/p&gt;
+&lt;h2 id=&#34;overview--purpose&#34;&gt;Overview / Purpose&lt;/h2&gt;
+&lt;p&gt;I wanted to actually understand DNS resolution instead of just trusting whatever an extension or my OS defaults to. So I built Pi-hole in Docker, locked it down, and added encrypted DNS on top of that — partly because it&amp;rsquo;s genuinely useful, partly because I use public WiFi a lot and wanted to stop being an easy target on the wire.&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>
