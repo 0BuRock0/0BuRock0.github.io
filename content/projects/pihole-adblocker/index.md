@@ -23,6 +23,7 @@ Tools I used:
 | DNSSEC | DNS response authentication |
 | OISD (big list) | Aggregated, actively-maintained blocklist covering ads, trackers, and malware |
 | Phishing Army | Blocklist focused specifically on active phishing domains |
+| StevenBlack's hosts list | Pi-hole's default blocklist, included out of the box — general ad/tracker coverage baseline underneath the other two |
 
 ## Architecture / Setup
 
@@ -35,7 +36,30 @@ Two containers do the work: Pi-hole handles filtering and acts as my DNS server,
 | Pi-hole | Gets every DNS query from my Mac, checks it against blocklists, sinkholes matches, forwards the rest to `dnscrypt-proxy#53` — Pi-hole's own built-in upstream checkboxes (Google, Cloudflare, Quad9, etc.) are all left unchecked; this Custom DNS entry is the only upstream Pi-hole uses. |
 | dnscrypt-proxy | Takes what Pi-hole forwards and sends it to Quad9 encrypted — Quad9 is chosen inside dnscrypt-proxy's own config (`dnscrypt-proxy.toml`), not in Pi-hole — using X25519 key exchange, XChaCha20-Poly1305 encryption, Ed25519 authentication, so nothing leaves my machine as plaintext DNS. |
 
-[SCREENSHOT: architecture diagram — Mac (DNS: 127.0.0.1) → Pi-hole container (port 53, filtering) → dnscrypt-proxy container (port 5053, encryption) → Quad9 filtered resolver]
+```
+DNS Resolution Flow
+├── Mac (Apple Silicon)
+│   └── DNS setting → 127.0.0.1
+│
+├── pihole (Docker container, listens on 127.0.0.1:53)
+│   ├── Blocklists
+│   │   ├── StevenBlack's hosts    — Pi-hole default, included out of the box
+│   │   ├── OISD (big list)       — ads / trackers / malware
+│   │   └── Phishing Army         — active phishing domains
+│   ├── DNSSEC validation         → off (see Bug 3)
+│   └── Custom DNS upstream       → dnscrypt-proxy#53
+│
+├── dnscrypt-proxy (Docker container, internal port 53)
+│   ├── Config                    → dnscrypt-proxy.toml
+│   ├── Protocol                  → DNSCrypt (X25519 / XChaCha20-Poly1305 / Ed25519)
+│   └── Upstream                  → Quad9 (quad9-dnscrypt-ip4-filter-pri)
+│
+└── Quad9 (filtered resolver)
+    ├── DNSSEC validation         → on, authoritative
+    └── Known-malicious domain filtering
+```
+
+*Note on that middle box: `dnscrypt-proxy#53` is the service name over the internal container port. `5053` only exists as the host-side mapping, visible from the Mac — I mixed those up early on, which is exactly what Bug 2 below is about.*
 
 ## The Privacy & Threat Model
 
@@ -48,35 +72,41 @@ Every choice here came from an actual concern, not a default I just went with:
 | DNS spoofing / cache poisoning | A forged response could quietly redirect me to an attacker's server. | Turned on DNSSEC in Pi-hole so responses get validated against the real authoritative chain. |
 | My dashboard or DNS port being reachable by anything else on the network | No reason for that to be possible on a single-machine setup. | Both containers bound to `127.0.0.1` only. |
 | Container config accidentally widening my attack surface | Easy to over-mount volumes or over-grant permissions without noticing. | Only the two volumes Pi-hole actually needs, no extra capabilities, password lives in `.env` instead of hardcoded. |
-| Relying on a single blocklist source | Any one list can lag on new threats or miss categories it wasn't built for. | Layered OISD's big list (broad ad/tracker/malware coverage) with Phishing Army (phishing-specific, updated independently) — Quad9's own filtering is a third, independent layer underneath both. |
+| Relying on a single blocklist source | Any one list can lag on new threats or miss categories it wasn't built for. | Pi-hole ships with StevenBlack's hosts list by default; layered OISD's big list (broad ad/tracker/malware coverage) and Phishing Army (phishing-specific, updated independently) on top of it, so no single list is a point of failure — Quad9's own filtering underneath is separate from this and covered below. |
 
 ## Findings
 
-- [ ] **DNS interception and filtering actually working**
-  [SCREENSHOT: dashboard + query log showing live traffic and blocks]
+- [x] **DNS interception and filtering actually working**
+  ![Pi-hole dashboard homepage](screenshots/02-dashboard-overview.png)
+  ![Pi-hole query log showing real traffic and blocks](screenshots/11-query-log-real-traffic.png)
 
-- [ ] **Encrypted upstream confirmed**
-  [SCREENSHOT: dnscrypt-proxy log showing a clean connection to Quad9]
-  *Confirmed via `docker logs dnscrypt-proxy` — connected to `quad9-dnscrypt-ip4-filter-pri` at ~100ms, no errors.*
+- [x] **Encrypted upstream confirmed**
+  ![dnscrypt-proxy log showing a clean connection to Quad9](screenshots/03-dnscrypt-connection-log.png)
+  *Confirmed via `docker logs dnscrypt-proxy` — connected to `quad9-dnscrypt-ip4-filter-pri` at ~59ms, no errors.*
 
-- [ ] **DNSSEC on and validating**
-  [SCREENSHOT: DNSSEC checkbox enabled]
+- [x] **DNSSEC handled correctly — on at Quad9, off in Pi-hole**
+  ![Pi-hole DNSSEC checkbox unchecked, intentionally](screenshots/05-dnssec-off-intentional.png)
+  *My original plan here was to just flip Pi-hole's DNSSEC toggle on and call it done — that's genuinely what I set out to do. Turned out Quad9 already validates DNSSEC before handing dnscrypt-proxy a response, and doesn't pass along the raw signature data for Pi-hole to re-check independently. So Pi-hole asked for proof it could never get and rejected everything. Left unchecked on purpose now — see Bug 3 below for how I found this.*
 
-- [ ] **Survives sleep/wake and reboots without babysitting**
-  [SCREENSHOT: both containers `Up` right after waking the laptop]
+- [x] **Survives sleep/wake and reboots without babysitting**
+  ![Both containers Up right after waking the laptop](screenshots/13-containers-survive-sleep.png)
   *Docker Desktop set to launch at login, both containers set to `restart: unless-stopped` — together that means I never have to manually restart anything.*
 
-- [ ] **Actually replaced my browser extensions**
-  [SCREENSHOT: before/after with extensions off, ads still blocked]
+- [x] **Actually replaced my browser extensions**
+  ![Before and after comparison with extensions off, ads still blocked](screenshots/12-before-after-adblock.png)
   *Ran with extensions disabled for a couple weeks first before deleting them for good.*
 
-- [ ] **Layered blocklists beyond Pi-hole's defaults**
-  [SCREENSHOT: Pi-hole's Adlists page showing OISD big list and Phishing Army added, plus Group Management showing total domains on the list after Update Gravity]
-  *Added OISD's big list for broad ad/tracker/malware coverage and Phishing Army specifically for active phishing domains — three independent filtering layers now (blocklists, Quad9's own filtering, DNSSEC validation), so no single source is a point of failure.*
+- [x] **Three blocklists deep, not just Pi-hole's default**
+  ![Pi-hole's Lists page: StevenBlack's default hosts list plus OISD big list and Phishing Army, sidebar showing total domain count](screenshots/06-adlists-oisd-phishing-army.png)
+  *StevenBlack's hosts list ships with Pi-hole by default — I layered OISD's big list on top for broad ad/tracker/malware coverage, and Phishing Army specifically for active phishing domains, updated independently of the other two. Three independent filtering layers now (blocklists, Quad9's own filtering, DNSSEC validation), so no single source is a point of failure.*
 
-## Two Bugs That Taught Me More Than the Working Setup Did
+- [x] **Holding up over real, longer-term use**
+  ![Pi-hole dashboard summary cards and 24-hour query chart, captured after several days of real daily use](screenshots/14-longterm-stats.png)
+  *Pi-hole v6 doesn't actually have a multi-day trend graph in the web UI — the 24-hour chart resets daily. What proves this held up isn't a graph, it's the cumulative counters: 20,063 total queries and 495,715 domains on the lists, captured after roughly a week of normal daily use, not five minutes after setup.*
 
-Getting this running cleanly took two separate debugging sessions after it *looked* done. Both turned out to be more instructive than the parts that worked on the first try.
+## Three Bugs That Taught Me More Than the Working Setup Did
+
+Getting this running cleanly took three separate debugging sessions after it *looked* done. All three turned out to be more instructive than the parts that worked on the first try.
 
 ### Bug 1: cloudflared was already dead
 
@@ -87,21 +117,41 @@ ERR DNS Proxy is no longer supported since version 2026.2.0
 dns-proxy feature is no longer supported
 ```
 
-The container looked "running" — `docker ps` would've shown it happily `Up` — but it wasn't doing anything. I checked Cloudflare's own changelog instead of assuming I'd misconfigured something, and confirmed `proxy-dns` had been deprecated in November 2025 and pulled entirely from new releases in February 2026. I swapped in `dnscrypt-proxy`, still actively maintained, and used the moment to actually reconsider DoH vs. DNSCrypt rather than defaulting to my original plan out of habit.
+The container looked "running" — `docker ps` would've shown it happily `Up` — but it wasn't doing anything. I checked Cloudflare's own changelog instead of assuming I'd misconfigured something, and confirmed `proxy-dns` had been deprecated in November 2025 and pulled entirely from new releases in February 2026.
+
+![Cloudflare changelog confirming proxy-dns deprecation, or the repeating terminal error](screenshots/07-cloudflared-deprecation-error.png)
+
+I swapped in `dnscrypt-proxy`, still actively maintained, and used the moment to actually reconsider DoH vs. DNSCrypt rather than defaulting to my original plan out of habit.
 
 ### Bug 2: `127.0.0.1` doesn't mean what I thought it meant inside Docker
 
 Once dnscrypt-proxy was running and I pointed Pi-hole at `127.0.0.1#5053`, everything looked fine — dashboard loaded, containers showed healthy, dnscrypt-proxy's own logs showed a clean connection to Quad9. But new domains I hadn't visited before just hung forever, while anything already cached still worked.
 
-The Pi-hole logs gave it away:
+![Pi-hole DNS settings mid-bug: upstream checkboxes unchecked, Custom DNS still set to the broken 127.0.0.1#5053](screenshots/15-dns-broken-config-live.png)
+
+`/var/log/pihole/pihole.log` gave it away:
 
 ```
-ERROR: Cannot receive UDP DNS reply: Timeout - no response from upstream DNS server
+dnsmasq[52]: query[A] mobile.events.data.microsoft.com from 172.18.0.1
+dnsmasq[52]: forwarded mobile.events.data.microsoft.com to 127.0.0.1#5053
+dnsmasq[52]: query[A] mobile.events.data.microsoft.com from 172.18.0.1
+dnsmasq[52]: forwarded mobile.events.data.microsoft.com to 127.0.0.1#5053
 ```
 
-Running `docker exec pihole dig google.com @127.0.0.1` — from *inside* the Pi-hole container — timed out too, identically. That was the tell: I was asking Pi-hole to reach `127.0.0.1`, but each Docker container has its own isolated loopback interface. From inside Pi-hole's container, `127.0.0.1` means Pi-hole itself, not dnscrypt-proxy. I'd pointed Pi-hole at a port on its own container that nothing was listening on — a dead end that explained every symptom: cached answers still resolved instantly (no forwarding needed), anything new just hung (forwarding target unreachable), and dnscrypt-proxy's own logs looked perfectly healthy the whole time because it was never actually being asked anything.
+Same domain, forwarded to the same dead end, over and over, seconds apart — that's a client retrying because it never got an answer. Every query in the log was landing on `127.0.0.1#5053` and just never coming back.
+
+![Pi-hole query log showing repeated forwards to the broken upstream with no reply](screenshots/08-container-networking-bug-log.png)
+
+Running `docker exec pihole dig google.com @127.0.0.1` — from *inside* the Pi-hole container — timed out too, identically.
+
+![dig command timing out from inside the Pi-hole container](screenshots/09-container-networking-bug-dig-timeout.png)
+
+That was the tell: I was asking Pi-hole to reach `127.0.0.1`, but each Docker container has its own isolated loopback interface. From inside Pi-hole's container, `127.0.0.1` means Pi-hole itself, not dnscrypt-proxy. I'd pointed Pi-hole at a port on its own container that nothing was listening on — a dead end that explained every symptom: cached answers still resolved instantly (no forwarding needed), anything new just hung (forwarding target unreachable), and dnscrypt-proxy's own logs looked perfectly healthy the whole time because it was never actually being asked anything.
 
 The fix was switching to Docker's service-name networking: `dnscrypt-proxy#53` (the service name from `docker-compose.yml`, and dnscrypt-proxy's *internal* container port — not the `5053` host-side mapping, which only exists from the Mac's perspective, not from inside another container).
+
+![dig command from inside Pi-hole now succeeding against dnscrypt-proxy](screenshots/10-container-networking-fix-confirmed.png)
+![Pi-hole DNS settings showing the fix: no built-in upstreams checked, Custom DNS set to dnscrypt-proxy#53](screenshots/04-dns-settings-custom-upstream.png)
 
 ### Bug 3: DNSSEC validated twice, in a way that broke everything
 
@@ -131,6 +181,8 @@ It also changed how I think about picking a security protocol, and about stackin
 2. Clone this repo, `cp .env.example .env`, set a real password
 3. `docker compose up -d`
 4. Point your Mac's DNS (Network settings) at `127.0.0.1`
-5. In Pi-hole, set the upstream to Custom DNS `127.0.0.1#5053` and turn on DNSSEC
+5. In Pi-hole, set the upstream to Custom DNS `dnscrypt-proxy#53` and leave DNSSEC off — see Bug 2 and Bug 3 above for why both of those are the way they are, not `127.0.0.1#5053` with DNSSEC on like I originally had it.
 
 ---
+
+*Tags: cybersecurity, networking, self-hosting*

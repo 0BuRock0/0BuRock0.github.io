@@ -4,7 +4,6 @@ theme = "PaperMod"
 languageCode = "en-us"
 
 [params]
-  favicon = "favicon.png" 
   env = "production"
   description = "Electrical & Electronics Engineering Student | Security Researcher"
   author = "Burak"
@@ -39,6 +38,9 @@ languageCode = "en-us"
     [[params.profileMode.buttons]]
       name = "whoami"
       url = "/whoami/"
+  
+  [params.assets]
+    favicon = "/favicon.png"
 
 
   # Sosyal medya ikonları
