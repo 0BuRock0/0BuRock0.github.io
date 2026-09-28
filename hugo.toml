@@ -1,0 +1,71 @@
+baseURL = "https://0BuRock0.github.io/"
+title = "0BuRock0's Portfolio"
+theme = "PaperMod"
+languageCode = "en-us"
+
+[params]
+  env = "production"
+  description = "Electrical & Electronics Engineering Student | Security Researcher"
+  author = "Burak"
+  
+  # Varsayılan temayı karanlık yapıyoruz
+  defaultTheme = "dark"
+  
+  # Okuma süresi ve paylaşım butonları
+  ShowReadingTime = true
+  ShowShareButtons = false
+  ShowCodeCopyButtons = true # Kod bloklarına "Kopyala" butonu ekler
+  ShowBreadCrumbs = true
+  
+  # Sol üstteki terminal logosu
+  [params.label]
+    text = "$ cd /home"
+    icon = ""
+    iconHeight = 35
+  
+
+  [params.profileMode]
+    enabled = true
+    title = "Burak"
+    subtitle = "Electrical & Electronics Engineering Student | Certified Associate Penetration Tester"
+    
+    # Sosyal medya ikonlarının altındaki butonlar (İsteğe bağlı)
+    [[params.profileMode.buttons]]
+      name = "Projects"
+      url = "/projects/"
+    [[params.profileMode.buttons]]
+      name = "Writeups"
+      url = "/writeups/"
+    [[params.profileMode.buttons]]
+      name = "whoami"
+      url = "/whoami/"
+  
+  [params.assets]
+    favicon = "/favicon.png"
+
+
+  # Sosyal medya ikonları
+  [[params.socialIcons]]
+    name = "github"
+    url = "https://github.com/0BuRock0"
+  [[params.socialIcons]]
+    name = "linkedin"
+    url = "https://www.linkedin.com/in/burak-baştürk/"
+
+# Menü Yapılandırması (PaperMod'da sorunsuz çalışır)
+[menu]
+  [[menu.main]]
+    identifier = "whoami"
+    name = "Whoami"
+    url = "/whoami/"
+    weight = 10
+  [[menu.main]]
+    identifier = "projects"
+    name = "Projects"
+    url = "/projects/"
+    weight = 20
+  [[menu.main]]
+    identifier = "writeups"
+    name = "Writeups"
+    url = "/writeups/"
+    weight = 30

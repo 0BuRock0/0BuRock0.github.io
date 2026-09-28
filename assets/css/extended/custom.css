@@ -1,0 +1,11 @@
+/* Logoyu monospace (terminal) fontu yap ve yanıp sönen imleç ekle */
+.logo a {
+    font-family: monospace, monospace;
+}
+.logo a::after {
+    content: "_";
+    animation: blink 1s step-start infinite;
+}
+@keyframes blink {
+    50% { opacity: 0; }
+}
